@@ -25,8 +25,9 @@ is confused, the mobile layout is broken, or a skeptic doesn't trust your claims
 ```bash
 pip install "personalens[browser]"
 playwright install chromium
-ollama pull llama3.2-vision          # or llava:7b — use a capable vision model
-                                     # (tiny models like moondream are too weak)
+ollama pull qwen2.5-vl               # or llama3.2-vision / llava:7b — a capable vision model
+                                     # (newer/larger vision models review best; tiny ones
+                                     #  like moondream are too weak)
 
 personalens review https://example.com \
   --personas personas.md \
@@ -44,6 +45,29 @@ Average: 7.2/10
    8/10  Impatient First-Time Visitor
    9/10  Accessibility-Conscious User
 ```
+
+## Example review (real output)
+
+A real run (Playwright + a local vision model) reviewing a CV page:
+
+```markdown
+## Impatient First-Time Visitor — 5/10
+_A clean, organized resume page… but the text is long and dense, which might
+overwhelm a first-time visitor who wants to quickly understand what this is._
+
+**Problems**
+- The text is too long and dense for a first-time visitor
+- The visual hierarchy could be improved (bigger fonts for name/profession)
+
+## Mobile User — 5/10
+_Clean layout, no horizontal scrolling, adequate tap targets…_
+
+**Problems**
+- Text size could be improved for readability / accessibility
+```
+
+Review quality tracks the vision model — **qwen2.5-vl** / **llama3.2-vision** give
+solid, specific feedback; very small models are too weak.
 
 ## Personas (tracked over time)
 
