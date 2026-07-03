@@ -48,26 +48,27 @@ Average: 7.2/10
 
 ## Example review (real output)
 
-A real run (Playwright + a local vision model) reviewing a CV page:
+A real run (Playwright + **Qwen2.5-VL**) reviewing a product landing page:
 
 ```markdown
-## Impatient First-Time Visitor — 5/10
-_A clean, organized resume page… but the text is long and dense, which might
-overwhelm a first-time visitor who wants to quickly understand what this is._
+## Impatient First-Time Visitor — 7/10
+_Clear tagline and message, but lacks a clear call-to-action for someone skimming._
 
 **Problems**
-- The text is too long and dense for a first-time visitor
-- The visual hierarchy could be improved (bigger fonts for name/profession)
+- No clear call-to-action — not obvious what to do next
+- Content is dense and could overwhelm a first-time skimmer
 
-## Mobile User — 5/10
-_Clean layout, no horizontal scrolling, adequate tap targets…_
+## Mobile User — 7/10
+_Visually striking and easy to navigate; some sections run long._
 
 **Problems**
-- Text size could be improved for readability / accessibility
+- Long sections could be broken into smaller, digestible chunks
+- Dense sections would benefit from subheadings, bullets, or a visual
 ```
 
-Review quality tracks the vision model — **qwen2.5-vl** / **llama3.2-vision** give
-solid, specific feedback; very small models are too weak.
+Review quality tracks the vision model — **Qwen2.5-VL** / **llama3.2-vision** give
+solid, specific feedback (Qwen2.5-VL even flagged an off-screen CTA on mobile);
+very small models are too weak.
 
 ## Personas (tracked over time)
 
