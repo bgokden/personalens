@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import base64
 import json
+import re
 import urllib.request
 from typing import Any, Protocol, runtime_checkable
 
@@ -26,6 +27,25 @@ REVIEW_SCHEMA: dict[str, Any] = {
     },
     "required": ["score", "summary", "positives", "problems", "visual_issues"],
 }
+
+
+def _extract_json(text: str) -> dict | None:
+    """Parse a JSON object from a model response (tolerant of prose / code fences)."""
+    if not text or not text.strip():
+        return None
+    try:
+        obj = json.loads(text)
+        return obj if isinstance(obj, dict) else None
+    except Exception:
+        pass
+    m = re.search(r"\{.*\}", text, re.DOTALL)
+    if not m:
+        return None
+    try:
+        obj = json.loads(m.group(0))
+        return obj if isinstance(obj, dict) else None
+    except Exception:
+        return None
 
 
 def build_prompt(persona: Persona, page_text: str) -> str:
@@ -61,23 +81,41 @@ class OllamaVisionBackend:
         self.temperature = temperature
         self.timeout = timeout
 
-    def review(self, persona, images, page_text, schema):
-        body = {
+    def _call(self, prompt: str, images: list[bytes], schema: dict[str, Any] | None) -> str:
+        body: dict[str, Any] = {
             "model": self.model,
-            "prompt": build_prompt(persona, page_text),
+            "prompt": prompt,
             "images": [base64.b64encode(img).decode("ascii") for img in images],
             "stream": False,
-            "format": schema,
             "options": {"temperature": self.temperature},
         }
+        if schema is not None:
+            body["format"] = schema
         req = urllib.request.Request(
             f"{self.host}/api/generate",
             data=json.dumps(body).encode("utf-8"),
             headers={"Content-Type": "application/json"},
         )
         with urllib.request.urlopen(req, timeout=self.timeout) as resp:
-            payload = json.loads(resp.read().decode("utf-8"))
-        return json.loads(payload["response"])
+            return json.loads(resp.read().decode("utf-8")).get("response", "")
+
+    def review(self, persona, images, page_text, schema):
+        prompt = build_prompt(persona, page_text)
+        # 1) Native JSON-schema constraint (fast, exact — when the model supports it).
+        data = _extract_json(self._call(prompt, images, schema))
+        if data is not None:
+            return data
+        # 2) Fallback for models that ignore `format` (e.g. some Qwen3-VL builds):
+        #    ask for the JSON in the prompt and extract it.
+        prompt2 = (
+            prompt
+            + "\n\nRespond with ONLY a JSON object of this exact shape:\n"
+            + '{"score": <0-10 int>, "summary": "", "positives": [], "problems": [], "visual_issues": []}'
+        )
+        data = _extract_json(self._call(prompt2, images, schema=None))
+        if data is None:
+            raise ValueError("model returned no parseable JSON")
+        return data
 
 
 class FakeVisionBackend:

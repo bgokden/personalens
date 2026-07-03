@@ -25,7 +25,7 @@ is confused, the mobile layout is broken, or a skeptic doesn't trust your claims
 ```bash
 pip install "personalens[browser]"
 playwright install chromium
-ollama pull qwen2.5-vl               # or llama3.2-vision / llava:7b — a capable vision model
+ollama pull qwen3-vl                 # best; or qwen2.5-vl / llama3.2-vision — a capable vision model
                                      # (newer/larger vision models review best; tiny ones
                                      #  like moondream are too weak)
 
@@ -66,9 +66,10 @@ _Visually striking and easy to navigate; some sections run long._
 - Dense sections would benefit from subheadings, bullets, or a visual
 ```
 
-Review quality tracks the vision model — **Qwen2.5-VL** / **llama3.2-vision** give
-solid, specific feedback (Qwen2.5-VL even flagged an off-screen CTA on mobile);
-very small models are too weak.
+Review quality tracks the vision model — **Qwen3-VL** gives the sharpest, most
+critical feedback; **Qwen2.5-VL** / **llama3.2-vision** are solid; very small models
+are too weak. (The Ollama backend falls back to prompt-based JSON for models that
+don't support the `format` schema constraint, so newer vision models work too.)
 
 ## Personas (tracked over time)
 
