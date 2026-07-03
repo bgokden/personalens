@@ -125,6 +125,20 @@ An image reviewer is just `review(persona, images, page_text, schema) -> dict`:
 
 Output is **JSON-schema-constrained**, so scores and findings are structured, not free text.
 
+## Choosing a vision model
+
+| Model | Approx. local RAM | Notes |
+|---|---|---|
+| `qwen3-vl:8b` | ~8–12 GB | **Recommended local default** — sharpest reviews in testing |
+| `qwen2.5-vl:7b` | ~8 GB | Solid local alternative |
+| `llama3.2-vision` | ~8 GB | General-purpose |
+| `qwen3.6` *(36B, native multimodal)* | ~40+ GB | Best quality, but too large for a typical laptop — run it via a **cloud / OpenAI-compatible endpoint** (`--host`), not locally |
+| `moondream` | tiny | Too weak — avoid |
+
+Large native-multimodal models won't load on a typical 32 GB machine (Ollama returns
+`unable to load model`); personalens skips a model it can't load rather than crashing.
+Point `--host`/`--model` at a hosted endpoint to use them.
+
 ## How it works
 
 1. **Capture** — Playwright loads the URL and screenshots key states (viewport + full page).
