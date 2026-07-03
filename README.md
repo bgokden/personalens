@@ -127,6 +127,12 @@ Output is **JSON-schema-constrained**, so scores and findings are structured, no
 
 ## Choosing a vision model
 
+**Bigger is better here — larger vision models are recommended.** Review depth and
+criticality scaled clearly with model size in testing
+(`moondream` ≪ `llava:7b` ≪ `qwen2.5-vl` ≪ `qwen3-vl` ≲ `qwen3.6`). Use the largest
+model you can run — locally if it fits, otherwise via a cloud / OpenAI-compatible
+endpoint. Tiny models produce shallow or empty reviews.
+
 | Model | Approx. local RAM | Notes |
 |---|---|---|
 | `qwen3-vl:8b` | ~8–12 GB | **Recommended local default** — sharpest reviews in testing |
