@@ -71,6 +71,11 @@ critical feedback; **Qwen2.5-VL** / **llama3.2-vision** are solid; very small mo
 are too weak. (The Ollama backend falls back to prompt-based JSON for models that
 don't support the `format` schema constraint, so newer vision models work too.)
 
+→ **[Full sample report](examples/sample-report.md)** — a real run reviewing Hacker
+News with three personas (`qwen3-vl:8b`): every score, problem, and visual issue each
+persona flagged (e.g. mobile: *"horizontal scrolling required, tiny 'hide | discuss'
+tap targets"*).
+
 ## Personas (tracked over time)
 
 Personas live in a versioned [`personas.md`](personas.md):
