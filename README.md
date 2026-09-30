@@ -173,6 +173,11 @@ pytest        # offline core tests (FakeVisionBackend + a built Capture; no brow
 Real browser + vision are exercised by a gated integration test
 (`PERSONALENS_INTEGRATION=1`) and verified locally.
 
+## Work with us
+
+Need something like this running in production, or built on your own data? **[PrimAxiom Labs](https://primaxiom.ai)** builds and runs AI systems for companies: a short paid scoping step, then a four-week pilot or a small custom model that runs on your own servers.
+Email **berk@primaxiom.ai** · [primaxiom.ai](https://primaxiom.ai)
+
 ## License
 
 MIT © [Berk Gökden](https://berkgokden.com)
